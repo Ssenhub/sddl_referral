@@ -22,7 +22,6 @@
 
         public virtual EntityEntry<TEntity> Add(TEntity entity)
         {
-            this.entitySet.Where(t => true);
             return this.entitySet.Add(entity);
         }
 
