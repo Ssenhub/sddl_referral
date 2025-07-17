@@ -93,7 +93,6 @@
 
         [Authorize]
         [EnableQuery]
-        //public async Task<ActionResult<IQueryable<Referral>>> Get(ODataQueryOptions<Referral> queryOptions)
         public async Task<IActionResult> Get(ODataQueryOptions<Referral> queryOptions)
         {
             return await Utility.ExecuteAndThrow(
