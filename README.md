@@ -3,7 +3,7 @@ A. How to run unit tests:
 1. Open SddlReferral.sln in Visual Studio 2022.
 2. Click Test -> Run All Tests
 
-Unit test results can be viewed in Test Explorer (Client Test -> Test Explorer to open it)
+Unit test results can be viewed in Test Explorer (Click 'Test -> Test Explorer' to open it)
 
 B. How to run functional tests:
 
