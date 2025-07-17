@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34310.174
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SddlReferral", "SddlReferral.csproj", "{77E4B3BB-E2FE-45E3-9D3A-0F6D74D1F9D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SddlReferralTests", "Tests\SddlReferralTests.csproj", "{9BCDF781-3083-7577-51EC-482825A347BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77E4B3BB-E2FE-45E3-9D3A-0F6D74D1F9D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77E4B3BB-E2FE-45E3-9D3A-0F6D74D1F9D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77E4B3BB-E2FE-45E3-9D3A-0F6D74D1F9D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77E4B3BB-E2FE-45E3-9D3A-0F6D74D1F9D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BCDF781-3083-7577-51EC-482825A347BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BCDF781-3083-7577-51EC-482825A347BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BCDF781-3083-7577-51EC-482825A347BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BCDF781-3083-7577-51EC-482825A347BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {974F4E71-2EF6-46CB-A5D3-0C017BBF7F8A}
+	EndGlobalSection
+EndGlobal
