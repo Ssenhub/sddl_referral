@@ -39,3 +39,6 @@ D. How to generate token:
 
 E. API dataflow design   
    https://excalidraw.com/#json=5rhGnIJb-Goj0z2Oux59j,ckv0TrUPZXKPqKiTqFOFEQ
+
+F. API specification:
+   ~\sddl_referral\SddlReferralApiSpec.yaml
