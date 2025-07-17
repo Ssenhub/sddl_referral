@@ -1,7 +1,7 @@
 A. How to run unit tests:
 
 1. Open SddlReferral.sln in Visual Studio 2022.
-2. Click Test -> Run All Tests
+2. Click 'Test -> Run All Tests'
 
 Unit test results can be viewed in Test Explorer (Click 'Test -> Test Explorer' to open it)
 
@@ -34,7 +34,7 @@ D. How to generate token:
     "admin": true,
     "iat": 1516239022
    }`
-3. Update "JwtSecretKey" setting in appsetting.json to match with "Sign JWT: Secret" in jwt.io.
+3. Update "JwtSecretKey" setting in appsetting.json to match with secrect key under "Sign JWT: Secret" pane in jwt.io.
 4. Copy the generated token under "JSON Web Token" and use it as "Authorization" header
 
 E. API dataflow design   
