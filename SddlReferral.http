@@ -1,6 +1,37 @@
 @SddlReferral_HostAddress = http://localhost:5259
 
-POST {{SddlReferral_HostAddress}}/NewReferral/
+POST {{SddlReferral_HostAddress}}/NewReferral
+//Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0dXNlcklkIiwic3ViIjoiMTIzIiwibmFtZSI6InRlc3R1c2VyIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6IkFkbWluIn0.Kof-ftiTIyK44VZdwKCh5IpVaIfhP3M79huv5OTSdYU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30
+Content-Type: application/json
+Accept: application/json
+
+{
+  "ReferralCode":  "REFCODE"
+}
+
+###
+
+GET {{SddlReferral_HostAddress}}/Download/r000K
+User-Agent: Android
+Accept: application/json
+
+###
+
+GET {{SddlReferral_HostAddress}}/ValidateReferral/d3344b1c-09a6-4492-98c0-641a04251685
+User-Agent: Android
+Accept: application/json
+
+###
+
+PUT {{SddlReferral_HostAddress}}/CompleteReferral/r000K
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0dXNlcklkIiwic3ViIjoicmVmZXJlZWlkIiwibmFtZSI6InRlc3R1c2VyIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6IkFkbWluIn0.npL6LgnyEDzjaAbJw0pRn9tw2vfbv3mDRDlZbvLLrAM
+Accept: application/json
+
+###
+
+GET {{SddlReferral_HostAddress}}/Referrals
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0dXNlcklkIiwic3ViIjoiMTIzIiwibmFtZSI6InRlc3R1c2VyIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6IkFkbWluIn0.Kof-ftiTIyK44VZdwKCh5IpVaIfhP3M79huv5OTSdYU
 Accept: application/json
 
 ###
