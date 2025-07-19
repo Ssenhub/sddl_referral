@@ -41,5 +41,5 @@ F. How to generate token:
     "iat": 1516239022
    }`
 3. Update "JwtSecretKey" setting in appsettings.json to match with secret key under "Sign JWT: Secret" pane in jwt.io.
-4. Copy the generated token under "JSON Web Token" and use it as "Authorization" header
+4. Copy the generated token under "JSON Web Token" and use it as 'Bearer' token in "Authorization" header.
 
