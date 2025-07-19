@@ -76,9 +76,12 @@
                         return this.BadRequest("Link expired");
                     }
 
-                    // TODO: this.HttpContext.Connection.RemoteIpAddress gets populated with client IP address if this app is hosted directly
+                    // TODO 1: this.HttpContext.Connection.RemoteIpAddress gets populated with client IP address if this app is hosted directly
                     // and not behind a proxy or load balancer. It will need to handle X-Forwarded-For header for other network configurations.
                     // For the purpose of this exercise as a POC, this is out of scope. 
+                    /// TODO 2: The device fingerprint + timestamp should be signed by a secret which is stored in a safe vault (could be Azure Key Vault).
+                    /// Client should sent the fingerprint along with the signature to /validatereferral endpoint where the signature should be verified 
+                    /// against the fingerprint and timestamp. 
                     AppDownload appDownload = new AppDownload
                     {
                         FpId = Guid.NewGuid().ToString(),
