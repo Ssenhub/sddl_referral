@@ -1,4 +1,4 @@
-A. [API dataflow design](https://excalidraw.com/#json=yD6ygjdkqUP3ijnYg5SH8,jwH3gk51GodAsckUkD0xUQ)
+A. [API dataflow design](https://excalidraw.com/#json=Qs1pFdMCRMC4HVcXQKvRG,wsS-4QadhN5P_qBPmLxW8Q)
 
 B. API specification:
    ~\sddl_referral\SddlReferralApiSpec.yaml
