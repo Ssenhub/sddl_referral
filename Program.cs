@@ -8,6 +8,7 @@ namespace SddlReferral
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OData.ModelBuilder;
     using SddlReferral.Data;
+    using SddlReferral.Middlewares;
     using SddlReferral.Models;
     using SddlReferral.Settings;
     using System.Diagnostics.CodeAnalysis;
@@ -88,6 +89,7 @@ namespace SddlReferral
             // App middlewares
             app.UseForwardedHeaders();
             app.UseRouting();
+            app.UseMiddleware<ContollerExceptionMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());

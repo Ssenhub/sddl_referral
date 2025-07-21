@@ -13,15 +13,15 @@
 
     public class AppDownloadsController : ODataController
     {
-        private readonly ISddlReferralRepository dbContext;
+        private readonly ISddlReferralRepository dbRepo;
         
         private readonly ILogger<AppDownloadsController> logger;
 
         private readonly AppSettings settings;
 
-        public AppDownloadsController(ISddlReferralRepository context, ILogger<AppDownloadsController> logger, IOptions<AppSettings> options)
+        public AppDownloadsController(ISddlReferralRepository repository, ILogger<AppDownloadsController> logger, IOptions<AppSettings> options)
         {
-            this.dbContext = context;
+            this.dbRepo = repository;
             this.logger = logger;
             this.settings = options.Value;
         }
@@ -47,142 +47,132 @@
         [HttpGet("Download/{referralId}")]
         public async Task<IActionResult> RedirectDownload([FromODataUri] string referralId)
         {
-            return await Utility.ExecuteAndThrow(
-                async () =>
-                {
-                    if (!this.ModelState.IsValid)
-                    {
-                        return this.BadRequest(this.ModelState);
-                    }
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
 
-                    if (string.IsNullOrWhiteSpace(referralId))
-                    {
-                        this.logger.LogError("referralId is empty");
+            if (string.IsNullOrWhiteSpace(referralId))
+            {
+                this.logger.LogError("referralId is empty");
 
-                        return this.BadRequest("referralId is empty");
-                    }
+                return this.BadRequest("referralId is empty");
+            }
 
-                    Referral referral = await dbContext.Referrals.FirstOrDefaultAsync(r => r.ReferralId == referralId).ConfigureAwait(false);
+            Referral referral = await dbRepo.Referrals.FirstOrDefaultAsync(r => r.ReferralId == referralId).ConfigureAwait(false);
 
-                    // 1. Check if referral id exists
-                    if (referral == null)
-                    {
-                        return this.NotFound($"Referral Id ({referralId}) is not found");
-                    }
+            // 1. Check if referral id exists
+            if (referral == null)
+            {
+                return this.NotFound($"Referral Id ({referralId}) is not found");
+            }
 
-                    // 2. Check link expiration
-                    if (DateTime.UtcNow - referral.CreatedAt > this.settings.LinkExpirationPeriod)
-                    {
-                        return this.BadRequest("Link expired");
-                    }
+            // 2. Check link expiration
+            if (DateTime.UtcNow - referral.CreatedAt > this.settings.LinkExpirationPeriod)
+            {
+                return this.BadRequest("Link expired");
+            }
 
-                    // TODO 1: this.HttpContext.Connection.RemoteIpAddress gets populated with client IP address if this app is hosted directly
-                    // and not behind a proxy or load balancer. It will need to handle X-Forwarded-For header for other network configurations.
-                    // For the purpose of this exercise as a POC, this is out of scope. 
-                    /// TODO 2: As a future improvement if IP address, user agent are not to be stored in DB, the device fingerprint + client device info + timestamp
-                    /// should be signed by a secret which is stored in a safe vault (could be Azure Key Vault).
-                    /// Client should sent the fingerprint along with the signature to /validatereferral endpoint where the signature should be verified 
-                    /// against the fingerprint and the device info. 
-                    AppDownload appDownload = new AppDownload
-                    {
-                        FpId = Guid.NewGuid().ToString(),
-                        IpAddress = this.HttpContext.Connection.RemoteIpAddress?.ToString(),
-                        UserAgent = this.Request.Headers["User-Agent"].ToString(),
-                        ReferralId = referralId,
-                        ReferralCode = referral.ReferralCode
-                    };
+            // TODO 1: this.HttpContext.Connection.RemoteIpAddress gets populated with client IP address if this app is hosted directly
+            // and not behind a proxy or load balancer. It will need to handle X-Forwarded-For header for other network configurations.
+            // For the purpose of this exercise as a POC, this is out of scope. 
+            /// TODO 2: As a future improvement if IP address, user agent are not to be stored in DB, the device fingerprint + client device info + timestamp
+            /// should be signed by a secret which is stored in a safe vault (could be Azure Key Vault).
+            /// Client should sent the fingerprint along with the signature to /validatereferral endpoint where the signature should be verified 
+            /// against the fingerprint and the device info. 
+            AppDownload appDownload = new AppDownload
+            {
+                FpId = Guid.NewGuid().ToString(),
+                IpAddress = this.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                UserAgent = this.Request.Headers["User-Agent"].ToString(),
+                ReferralId = referralId,
+                ReferralCode = referral.ReferralCode
+            };
 
-                    this.dbContext.AppDownloads.Add(appDownload);
+            this.dbRepo.AppDownloads.Add(appDownload);
 
-                    try
-                    {
-                        await this.dbContext.SaveChangesAsync();
-                    }
-                    catch (Exception ex)
-                    {
-                        this.logger.LogError($"RedirectDownload failed to update DB. {ex}");
+            try
+            {
+                await this.dbRepo.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError($"RedirectDownload failed to update DB. {ex}");
 
-                        return this.StatusCode(500, ex.Message);
-                    }
+                return this.StatusCode(500, ex.Message);
+            }
 
-                    // Set cookie for correlation
-                    this.Response.Cookies.Append("fpId", appDownload.FpId, new CookieOptions { HttpOnly = true });
+            // Set cookie for correlation
+            this.Response.Cookies.Append("fpId", appDownload.FpId, new CookieOptions { HttpOnly = true });
 
-                    if (appDownload.UserAgent.ToLower().Contains("iphone") || appDownload.UserAgent.ToLower().Contains("ipad") || appDownload.UserAgent.ToLower().Contains("ios"))
-                    {
-                        return this.Redirect(this.settings.IosAppLink);
-                    }
-                    else if (appDownload.UserAgent.ToLower().Contains("android"))
-                    {
-                        return this.Redirect(this.settings.AndroidAppLink);
-                    }
-                    else
-                    {
-                        this.logger.LogError($"Unsupported device. User agent: {appDownload.UserAgent}");
+            if (appDownload.UserAgent.ToLower().Contains("iphone") || appDownload.UserAgent.ToLower().Contains("ipad") || appDownload.UserAgent.ToLower().Contains("ios"))
+            {
+                return this.Redirect(this.settings.IosAppLink);
+            }
+            else if (appDownload.UserAgent.ToLower().Contains("android"))
+            {
+                return this.Redirect(this.settings.AndroidAppLink);
+            }
+            else
+            {
+                this.logger.LogError($"Unsupported device. User agent: {appDownload.UserAgent}");
 
-                        return this.StatusCode(500, "Unsupported device");
-                    }
-                },
-                this.logger).ConfigureAwait(false);
+                return this.StatusCode(500, "Unsupported device");
+            }
         }
 
         [EnableQuery]
         [HttpGet("ValidateReferral/{fpId}")]
         public async Task<IActionResult> ValidateReferral([FromODataUri] Guid fpId)
         {
-            return await Utility.ExecuteAndThrow(
-                async () =>
-                {
-                    // Validations
-                    // 1. Model state error
-                    if (!this.ModelState.IsValid)
-                    {
-                        return this.BadRequest(this.ModelState);
-                    }
+            // Validations
+            // 1. Model state error
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
 
-                    AppDownload appDownload = await dbContext.AppDownloads.FirstOrDefaultAsync(x => x.FpId == fpId.ToString());
+            AppDownload appDownload = await dbRepo.AppDownloads.FirstOrDefaultAsync(x => x.FpId == fpId.ToString());
 
-                    // 2. Check device fingerprint exists
-                    if (appDownload == null)
-                    {
-                        return this.NotFound($"Device fingerprint ({fpId}) is not found");
-                    }
+            // 2. Check device fingerprint exists
+            if (appDownload == null)
+            {
+                return this.NotFound($"Device fingerprint ({fpId}) is not found");
+            }
 
-                    // 3. Check IP address match
-                    string ipAddress = this.HttpContext.Connection.RemoteIpAddress?.ToString();
+            // 3. Check IP address match
+            string ipAddress = this.HttpContext.Connection.RemoteIpAddress?.ToString();
 
-                    if (ipAddress != appDownload.IpAddress)
-                    {
-                        return this.BadRequest($"IP address mismatch");
-                    }
+            if (ipAddress != appDownload.IpAddress)
+            {
+                return this.BadRequest($"IP address mismatch");
+            }
 
-                    // 4. Check user agent match
-                    string userAgent = this.Request.Headers["User-Agent"].ToString();
+            // 4. Check user agent match
+            string userAgent = this.Request.Headers["User-Agent"].ToString();
 
-                    if (userAgent != appDownload.UserAgent)
-                    {
-                        return this.BadRequest($"User agent mismatch");
-                    }
+            if (userAgent != appDownload.UserAgent)
+            {
+                return this.BadRequest($"User agent mismatch");
+            }
 
-                    // 5. Check if referral id exists
-                    Referral referral = await dbContext.Referrals.FirstOrDefaultAsync(r => r.ReferralId == appDownload.ReferralId).ConfigureAwait(false);
+            // 5. Check if referral id exists
+            Referral referral = await dbRepo.Referrals.FirstOrDefaultAsync(r => r.ReferralId == appDownload.ReferralId).ConfigureAwait(false);
 
-                    if (referral == null)
-                    {
-                        this.logger.LogError($"Inconsistent data: Referral Id ('{appDownload.ReferralId}') exists is AppDownload but not Referral");
+            if (referral == null)
+            {
+                this.logger.LogError($"Inconsistent data: Referral Id ('{appDownload.ReferralId}') exists is AppDownload but not Referral");
 
-                        return this.NotFound($"Referral Id ('{appDownload.ReferralId}') is not found");
-                    }
+                return this.NotFound($"Referral Id ('{appDownload.ReferralId}') is not found");
+            }
 
-                    // 6. Check if referral is in pending state
-                    if (referral.Status != ReferralStatus.Pending)
-                    {
-                        return this.BadRequest($"Referral Id ('{appDownload.ReferralId}') for device fingerprint ('{fpId}') is already completed");
-                    }
+            // 6. Check if referral is in pending state
+            if (referral.Status != ReferralStatus.Pending)
+            {
+                return this.BadRequest($"Referral Id ('{appDownload.ReferralId}') for device fingerprint ('{fpId}') is already completed");
+            }
 
-                    return this.Ok(appDownload);
-                },
-                this.logger).ConfigureAwait(false);
+            return this.Ok(appDownload);
         }
     }
 }
