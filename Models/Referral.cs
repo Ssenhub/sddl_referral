@@ -8,14 +8,14 @@ namespace SddlReferral.Models
         [Key]
         public int Id { get; set; }
 
-        public string? ReferralId { get; set; }
+        public string ReferralId { get; set; }
 
         [Required]
         public string ReferralCode { get; set; }
 
-        public string? ReferrerUserId { get; set; }
+        public string ReferrerUserId { get; set; }
 
-        public string? RefereeUserId { get; set; }
+        public string RefereeUserId { get; set; }
 
         public ReferralStatus Status { get; set; }
 

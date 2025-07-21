@@ -15,7 +15,7 @@
             this.entitySet = set;
         }
 
-        public virtual async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await this.entitySet.FirstOrDefaultAsync(predicate).ConfigureAwait(false);
         }

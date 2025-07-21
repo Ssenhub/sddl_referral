@@ -76,10 +76,11 @@
             // TODO 1: this.HttpContext.Connection.RemoteIpAddress gets populated with client IP address if this app is hosted directly
             // and not behind a proxy or load balancer. It will need to handle X-Forwarded-For header for other network configurations.
             // For the purpose of this exercise as a POC, this is out of scope. 
-            /// TODO 2: As a future improvement if IP address, user agent are not to be stored in DB, the device fingerprint + client device info + timestamp
-            /// should be signed by a secret which is stored in a safe vault (could be Azure Key Vault).
-            /// Client should sent the fingerprint along with the signature to /validatereferral endpoint where the signature should be verified 
-            /// against the fingerprint and the device info. 
+            
+            // TODO 2: As a future improvement if IP address, user agent are not to be stored in DB, the device fingerprint + client device info + timestamp
+            // should be signed by a secret which is stored in a safe vault (could be Azure Key Vault).
+            // Client should sent the fingerprint along with the signature to /validatereferral endpoint where the signature should be verified 
+            // against the fingerprint and the device info. 
             AppDownload appDownload = new AppDownload
             {
                 FpId = Guid.NewGuid().ToString(),

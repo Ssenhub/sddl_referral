@@ -92,7 +92,8 @@ namespace SddlReferral
             app.UseMiddleware<ContollerExceptionMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.MapControllers();
+            //app.UseEndpoints(endpoints => endpoints.MapControllers());
 
             app.Run();
         }

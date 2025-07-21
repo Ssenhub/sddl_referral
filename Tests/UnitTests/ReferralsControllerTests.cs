@@ -237,7 +237,7 @@
             // Get for user referrerUserId
             ODataQueryOptions<Referral> queryOptions = CreateODataQueryOptions("?$filter=status eq 1");
 
-            IActionResult result = await controller.Get(queryOptions).ConfigureAwait(false);
+            IActionResult result = controller.Get(queryOptions);
 
             IQueryable<Referral> referralResult = ((OkObjectResult)result).Value as IQueryable<Referral>;
 

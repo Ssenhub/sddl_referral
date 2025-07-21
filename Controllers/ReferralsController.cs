@@ -88,7 +88,7 @@
 
         [Authorize]
         [EnableQuery]
-        public async Task<IActionResult> Get(ODataQueryOptions<Referral> queryOptions)
+        public IActionResult Get(ODataQueryOptions<Referral> queryOptions)
         {
             string userId = Utility.GetUserId(this.User);
 
