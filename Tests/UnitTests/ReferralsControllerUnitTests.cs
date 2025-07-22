@@ -24,7 +24,7 @@
 
     [ExcludeFromCodeCoverage]
     [TestClass]
-    public sealed class ReferralsControllerTests
+    public sealed class ReferralsControllerUnitTests
     {
         #region States
 

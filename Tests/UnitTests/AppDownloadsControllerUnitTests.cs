@@ -24,7 +24,7 @@
 
     [ExcludeFromCodeCoverage]
     [TestClass]
-    public sealed class AppDownloadsControllerTests
+    public sealed class AppDownloadsControllerUnitTests
     {
         #region States
 

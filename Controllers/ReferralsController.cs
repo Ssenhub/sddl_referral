@@ -30,6 +30,10 @@
         {
             if (!this.ModelState.IsValid)
             {
+                string ms = Newtonsoft.Json.JsonConvert.SerializeObject(this.ModelState);
+                
+                this.logger.LogError($"Serialized model state: {ms}");
+
                 return this.BadRequest(this.ModelState);
             }
 
@@ -50,6 +54,7 @@
             }
 
             referral.Status = ReferralStatus.Pending;
+            referral.CreatedAt = DateTime.UtcNow;
 
             this.dbRepo.Referrals.Add(referral);
 
