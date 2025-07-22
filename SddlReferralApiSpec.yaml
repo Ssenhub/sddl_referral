@@ -196,7 +196,7 @@ paths:
           schema:
             type: string
             format: uuid
-          example: 4bdb3a62-70e1-4a07-a56e-16db021e3848
+            example: 4bdb3a62-70e1-4a07-a56e-16db021e3848
         - name: User-Agent
           in: header
           schema:
